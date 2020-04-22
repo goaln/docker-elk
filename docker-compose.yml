@@ -86,16 +86,20 @@ services:
     networks:
       - elk
 
+  # The zipkin process services the UI, and also exposes a POST endpoint that
+  # instrumentation can send trace data to. Scribe is disabled by default.
   zipkin:
     build:
       context: zipkin/
     container_name: zipkin
     # Environment settings are defined here https://github.com/openzipkin/zipkin/blob/master/zipkin-server/README.md#environment-variables
     environment:
+      # Uncomment to enable scribe
+      # - SCRIBE_ENABLED=true
       # Uncomment to enable self-tracing
       # - SELF_TRACING_ENABLED=true
       # Uncomment to enable debug logging
-      # - JAVA_OPTS=-Dorg.slf4j.simpleLogger.log.zipkin2=debug
+      # - JAVA_OPTS=-Dlogging.level.zipkin2=DEBUG
       - STORAGE_TYPE=elasticsearch
       # Point the zipkin at the storage backend
       - ES_HOSTS=elasticsearch:9200
@@ -105,25 +109,27 @@ services:
     ports:
       # Port used for the Zipkin UI and HTTP Api
       - 9411:9411
+      # Uncomment if you set SCRIBE_ENABLED=true
+      # - 9410:9410
     networks:
       - elk
     depends_on:
       - kafka-zookeeper
       - elasticsearch
 
-  zipkin-ui:
-    build:
-      context: zipkin-ui/
-    container_name: zipkin-ui
-    environment:
-      # Change this if connecting to a different zipkin server
-      - ZIPKIN_BASE_URL=http://zipkin:9411
-    ports:
-      - 80:80
-    networks:
-      - elk
-    depends_on:
-      - zipkin
+  # zipkin-ui:
+  #   build:
+  #     context: zipkin-ui/
+  #   container_name: zipkin-ui
+  #   environment:
+  #     # Change this if connecting to a different zipkin server
+  #     - ZIPKIN_BASE_URL=http://zipkin:9411
+  #   ports:
+  #     - 80:80
+  #   networks:
+  #     - elk
+  #   depends_on:
+  #     - zipkin
 
 networks:
   elk:

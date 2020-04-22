@@ -22,12 +22,12 @@ COPY zipkin/ /zipkin/
 WORKDIR /zipkin
 
 RUN apk add unzip curl --no-cache && \
-    curl -SL $ZIPKIN_REPO/io/zipkin/zipkin-server/$ZIPKIN_VERSION/zipkin-server-$ZIPKIN_VERSION-slim.jar > zipkin-slim.jar && \
+    curl -SL $ZIPKIN_REPO/io/zipkin/zipkin-server/$ZIPKIN_VERSION/zipkin-server-$ZIPKIN_VERSION-exec.jar > zipkin-server.jar && \
     # don't break when unzip finds an extra header https://github.com/openzipkin/zipkin/issues/1932
-    unzip zipkin-slim.jar ; \
+    unzip zipkin-server.jar ; \
+    rm zipkin-server.jar && \
     # statically evaluate classpath to avoid https://github.com/docker/for-mac/issues/3643
     echo .:$(ls ${PWD}/BOOT-INF/lib/*.jar|tr '\n' ':')${PWD}/BOOT-INF/classes > classpath && \
-    rm zipkin-slim.jar && \
     apk del unzip
 
 FROM openzipkin/jre-full:11.0.4-11.33
@@ -35,8 +35,10 @@ LABEL MAINTAINER Zipkin "https://zipkin.io/"
 
 # Use to set heap, trust store or other system properties.
 ENV JAVA_OPTS -Djava.security.egd=file:/dev/./urandom
+# 3rd party modules like zipkin-aws will apply profile settings with this
+ENV MODULE_OPTS=
 
-RUN ["adduser -g '' -h /zipkin -D zipkin"]
+RUN adduser -g '' -h /zipkin -D zipkin
 
 # Add environment settings for supported storage types
 COPY --from=0 --chown=zipkin /zipkin/ /zipkin/
@@ -44,6 +46,6 @@ WORKDIR /zipkin
 
 USER zipkin
 
-EXPOSE 9411
+EXPOSE 9410 9411
 
 ENTRYPOINT ["run.sh"]

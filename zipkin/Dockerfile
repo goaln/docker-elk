@@ -48,4 +48,4 @@ USER zipkin
 
 EXPOSE 9410 9411
 
-ENTRYPOINT ["run.sh"]
+ENTRYPOINT ["/zipkin/run.sh"]

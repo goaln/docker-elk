@@ -72,7 +72,6 @@ services:
   kafka-zookeeper:
     build:
       context: kafka/
-      args:
     container_name: kafka-zookeeper
     # If using docker machine, uncomment the below and set your bootstrap
     # server list to 192.168.99.100:19092
@@ -90,7 +89,6 @@ services:
   zipkin:
     build:
       context: zipkin/
-      args:
     container_name: zipkin
     # Environment settings are defined here https://github.com/openzipkin/zipkin/blob/master/zipkin-server/README.md#environment-variables
     environment:
@@ -116,7 +114,6 @@ services:
   zipkin-ui:
     build:
       context: zipkin-ui/
-      args:
     container_name: zipkin-ui
     environment:
       # Change this if connecting to a different zipkin server

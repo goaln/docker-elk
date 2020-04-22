@@ -50,6 +50,7 @@ services:
       - elk
     depends_on:
       - elasticsearch
+      - kafka-zookeeper
 
   kibana:
     build:
@@ -67,6 +68,65 @@ services:
       - elk
     depends_on:
       - elasticsearch
+
+  kafka-zookeeper:
+    build:
+      context: kafka/
+      args:
+    container_name: kafka-zookeeper
+    # If using docker machine, uncomment the below and set your bootstrap
+    # server list to 192.168.99.100:19092
+    # environment:
+      # - KAFKA_ADVERTISED_HOST_NAME=192.168.99.100
+    ports:
+      - 2181:2181
+      - 9092:9092
+      # port 19092 is listening on localhost by default. In normal Docker,
+      # you can set your bootstrap server list to localhost:19092
+      - 19092:19092
+    networks:
+      - elk
+
+  zipkin:
+    build:
+      context: zipkin/
+      args:
+    container_name: zipkin
+    # Environment settings are defined here https://github.com/openzipkin/zipkin/blob/master/zipkin-server/README.md#environment-variables
+    environment:
+      # Uncomment to enable self-tracing
+      # - SELF_TRACING_ENABLED=true
+      # Uncomment to enable debug logging
+      # - JAVA_OPTS=-Dorg.slf4j.simpleLogger.log.zipkin2=debug
+      - STORAGE_TYPE=elasticsearch
+      # Point the zipkin at the storage backend
+      - ES_HOSTS=elasticsearch:9200
+      # Uncomment to see requests to and from elasticsearch
+      # - ES_HTTP_LOGGING=BODY
+      - KAFKA_BOOTSTRAP_SERVERS=kafka-zookeeper:9092
+    ports:
+      # Port used for the Zipkin UI and HTTP Api
+      - 9411:9411
+    networks:
+      - elk
+    depends_on:
+      - kafka-zookeeper
+      - elasticsearch
+
+  zipkin-ui:
+    build:
+      context: zipkin-ui/
+      args:
+    container_name: zipkin-ui
+    environment:
+      # Change this if connecting to a different zipkin server
+      - ZIPKIN_BASE_URL=http://zipkin:9411
+    ports:
+      - 80:80
+    networks:
+      - elk
+    depends_on:
+      - zipkin
 
 networks:
   elk:

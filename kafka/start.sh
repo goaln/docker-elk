@@ -1,8 +1,8 @@
-#!/bin/sh
+#! /busybox/sh
 
 echo Starting Zookeeper
-/kafka/bin/kafka-run-class.sh -Dlog4j.configuration=file:/kafka/config/log4j.properties org.apache.zookeeper.server.quorum.QuorumPeerMain /kafka/zookeeper/conf/zoo_sample.cfg &
-/kafka/bin/wait-for-zookeeper.sh
+ /busybox/sh /kafka/bin/kafka-run-class.sh -Dlog4j.configuration=file:/kafka/config/log4j.properties org.apache.zookeeper.server.quorum.QuorumPeerMain /kafka/zookeeper/conf/zoo_sample.cfg &
+ /busybox/sh /kafka/bin/wait-for-zookeeper.sh
 
 if [[ -z "$KAFKA_ADVERTISED_HOST_NAME" ]]; then
 listeners=PLAINTEXT://:9092
@@ -14,4 +14,4 @@ else
 fi
 
 echo Starting Kafka
-/kafka/bin/kafka-run-class.sh -name kafkaServer -Dlog4j.configuration=file:/kafka/config/log4j.properties kafka.Kafka /kafka/config/server.properties
+ /busybox/sh /kafka/bin/kafka-run-class.sh -name kafkaServer -Dlog4j.configuration=file:/kafka/config/log4j.properties kafka.Kafka /kafka/config/server.properties

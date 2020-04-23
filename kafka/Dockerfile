@@ -8,8 +8,8 @@ WORKDIR /kafka
 ADD install.sh /kafka/install
 RUN /kafka/install
 
-ADD wait-for-zookeeper.sh /kafka/bin
-ADD start.sh /kafka/bin
+ADD wait-for-zookeeper.sh /kafka/bin/
+ADD start.sh /kafka/bin/
 
 # Share the same base image to reduce layers used in testing
 FROM openzipkin/jre-full:11.0.4-11.33
@@ -17,7 +17,7 @@ LABEL MAINTAINER Zipkin "https://zipkin.io/"
 
 WORKDIR /kafka
 
-RUN adduser -g '' -h /kafka -D kafka
+RUN ["/busybox/sh", "-c", "adduser -g '' -h /kafka -D kafka"]
 
 COPY --from=0 --chown=kafka /kafka /kafka
 
@@ -26,4 +26,5 @@ USER kafka
 # Port 19092 is for connections from the Docker host
 EXPOSE 2181 9092 19092
 
-ENTRYPOINT ["/kafka/bin/start.sh"]
+ENTRYPOINT ["/busybox/sh", "/kafka/bin/start.sh"]
+

@@ -122,13 +122,6 @@ services:
   redis:
     image: redis:5.0.9
     container_name: redis
-    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
-    environment:
-    volumes:
-      - type: bind
-        source: ./redis/redis.conf
-        target: /usr/local/etc/redis/redis.conf
-        read_only: true
     ports:
       - 6379:6379
     networks:

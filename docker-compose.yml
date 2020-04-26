@@ -133,7 +133,7 @@ services:
     image: ifp-registry
     container_name: ifp-registry-1
     environment:
-      - ZIPKIN_URL=
+      #- ZIPKIN_URL=
       - HOST_NAME=ifp-registry-1
       - EUREKA_REGISTER=true
       - EUREKA_FETCH=true
@@ -147,7 +147,7 @@ services:
     image: ifp-registry
     container_name: ifp-registry-2
     environment:
-      - ZIPKIN_URL=
+      #- ZIPKIN_URL=
       - HOST_NAME=ifp-registry-2
       - EUREKA_REGISTER=true
       - EUREKA_FETCH=true
@@ -161,13 +161,32 @@ services:
     image: ifp-registry
     container_name: ifp-registry-3
     environment:
-      - ZIPKIN_URL=
+      #- ZIPKIN_URL=
       - HOST_NAME=ifp-registry-3
       - EUREKA_REGISTER=true
       - EUREKA_FETCH=true
       - EUREKA_SERVICE_URL=http://ifp-registry-1:8761/eureka/,http://ifp-registry-2:8761/eureka/
     ports:
       - 8763:8761
+    networks:
+      - elk
+
+  ifp-config:
+    build:
+      context: ifp-config/
+    image: ifp-config
+    container_name: ifp-config
+    volumes:
+      - type: bind
+        source: ./ifp-config/config-repo
+        target: /config-repo
+        read_only: true
+    environment:
+      - KAFKA_ZK=kafka-zookeeper:2181
+      - KAFKA_URL=kafka-zookeeper:9092
+      - EUREKA_SERVICE_URL=http://ifp-registry-1:8761/eureka/,http://ifp-registry-2:8761/eureka/,http://ifp-registry-3:8761/eureka/
+    ports:
+      - 7070:7070
     networks:
       - elk
 

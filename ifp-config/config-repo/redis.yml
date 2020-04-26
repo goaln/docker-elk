@@ -1,0 +1,6 @@
+spring:
+  redis:
+    host: ifp3-dev1
+    password:
+    port: 6377
+    database: 0

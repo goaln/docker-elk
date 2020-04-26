@@ -1,0 +1,24 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: user-center
+          uri: lb://USER-CENTER
+          order: 0
+          predicates:
+            - Path=/user-center/**
+#            - Weight=servicew1, 90
+          filters:
+            - StripPrefix=0
+#        - id: user-center_canary
+#          uri: lb://USER-CENTER_CANARY
+#          predicates:
+#            - Path=/user-center/**
+#            - Weight=servicew1, 10
+        - id: user-front
+          uri: lb://USER-FRONT
+          order: 0
+          predicates:
+            - Path=/user-front/**
+          filters:
+            - StripPrefix=0

@@ -119,19 +119,50 @@ services:
       - kafka-zookeeper
       - elasticsearch
 
-  # zipkin-ui:
-  #   build:
-  #     context: zipkin-ui/
-  #   container_name: zipkin-ui
-  #   environment:
-  #     # Change this if connecting to a different zipkin server
-  #     - ZIPKIN_BASE_URL=http://zipkin:9411
-  #   ports:
-  #     - 80:80
-  #   networks:
-  #     - elk
-  #   depends_on:
-  #     - zipkin
+  ifp-registry-1:
+    build:
+      context: ifp-registry/
+    container_name: ifp-registry-1
+    environment:
+      - ZIPKIN_URL=
+      - HOST_NAME=ifp-registry-1
+      - EUREKA_REGISTER=true
+      - EUREKA_FETCH=true
+      - EUREKA_SERVICE_URL=http://ifp-registry-2:8761/eureka/,http://ifp-registry-3:8761/eureka/
+    ports:
+      - 8761:8761
+    networks:
+      - elk
+
+  ifp-registry-2:
+    extends:
+      service: ifp-registry-1
+    container_name: ifp-registry-2
+    environment:
+      - ZIPKIN_URL=
+      - HOST_NAME=ifp-registry-2
+      - EUREKA_REGISTER=true
+      - EUREKA_FETCH=true
+      - EUREKA_SERVICE_URL=http://ifp-registry-1:8761/eureka/,http://ifp-registry-3:8761/eureka/
+    ports:
+      - 8761:8762
+    networks:
+      - elk
+
+  ifp-registry-3:
+    extends:
+      service: ifp-registry-1
+    container_name: ifp-registry-3
+    environment:
+      - ZIPKIN_URL=
+      - HOST_NAME=ifp-registry-3
+      - EUREKA_REGISTER=true
+      - EUREKA_FETCH=true
+      - EUREKA_SERVICE_URL=http://ifp-registry-1:8761/eureka/,http://ifp-registry-2:8761/eureka/
+    ports:
+      - 8761:8763
+    networks:
+      - elk
 
 networks:
   elk:

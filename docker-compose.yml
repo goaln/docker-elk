@@ -122,6 +122,7 @@ services:
   ifp-registry-1:
     build:
       context: ifp-registry/
+    image: ifp-registry
     container_name: ifp-registry-1
     environment:
       - ZIPKIN_URL=
@@ -135,8 +136,7 @@ services:
       - elk
 
   ifp-registry-2:
-    extends:
-      service: ifp-registry-1
+    image: ifp-registry
     container_name: ifp-registry-2
     environment:
       - ZIPKIN_URL=
@@ -145,13 +145,12 @@ services:
       - EUREKA_FETCH=true
       - EUREKA_SERVICE_URL=http://ifp-registry-1:8761/eureka/,http://ifp-registry-3:8761/eureka/
     ports:
-      - 8761:8762
+      - 8762:8761
     networks:
       - elk
 
   ifp-registry-3:
-    extends:
-      service: ifp-registry-1
+    image: ifp-registry
     container_name: ifp-registry-3
     environment:
       - ZIPKIN_URL=
@@ -160,7 +159,7 @@ services:
       - EUREKA_FETCH=true
       - EUREKA_SERVICE_URL=http://ifp-registry-1:8761/eureka/,http://ifp-registry-2:8761/eureka/
     ports:
-      - 8761:8763
+      - 8763:8761
     networks:
       - elk
 

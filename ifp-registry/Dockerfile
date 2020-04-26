@@ -1,6 +1,6 @@
 FROM openjdk:8-jdk-alpine
 
-ARG JAR_FILE=../ifp3/ifp-registry.jar
+ARG JAR_FILE=./ifp-registry.jar
 
 COPY ${JAR_FILE} app.jar
 

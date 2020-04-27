@@ -189,6 +189,31 @@ services:
       - 7070:7070
     networks:
       - elk
+    depends_on:
+      - kafka-zookeeper
+      - ifp-registry-1
+      - ifp-registry-2
+      - ifp-registry-3
+
+  ifp-gateway:
+    build:
+      context: ifp-gateway/
+    image: ifp-gateway
+    container_name: ifp-gateway
+    environment:
+      - KAFKA_ZK=kafka-zookeeper:2181
+      - KAFKA_URL=kafka-zookeeper:9092
+      - EUREKA_SERVICE_URL=http://ifp-registry-1:8761/eureka/,http://ifp-registry-2:8761/eureka/,http://ifp-registry-3:8761/eureka/
+    ports:
+      - 8080:8080
+    networks:
+      - elk
+    depends_on:
+      - kafka-zookeeper
+      - ifp-registry-1
+      - ifp-registry-2
+      - ifp-registry-3
+      - ifp-config
 
 networks:
   elk:

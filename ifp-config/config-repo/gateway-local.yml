@@ -1,40 +1,24 @@
 spring:
   cloud:
     gateway:
-      #自动生成路由表
-      discovery:
-        locator:
-          enabled: true
       routes:
-        - id: user-center-1
+        - id: user-center
           uri: lb://USER-CENTER
           order: 0
           predicates:
-            - Path=/user-center-1/**
+            - Path=/user-center/**
+#            - Weight=servicew1, 90
           filters:
             - StripPrefix=0
-            #熔断
-            - name: Hystrix
-              args:
-                name: fallbackcmd
-                fallbackUri: forward:/fallback
-            #限流
-            - name: RequestRateLimiter
-              args:
-                key-resolver: '#{@remoteAddrKeyResolver}'
-                #令牌桶每秒填充平均速率
-                redis-rate-limiter.replenishRate: 1
-                #令牌桶容量
-                redis-rate-limiter.burstCapacity: 2
-            #重试
-            - name: Retry
-              args:
-                #重试次数
-                retries: 2
-                #状态码配置，默认值是 SERVER_ERROR，匹配 5xx
-                series:
-                  - CLIENT_ERROR
-                  - SERVER_ERROR
-                methods:
-                  - GET
-                  - POST
+#        - id: user-center_canary
+#          uri: lb://USER-CENTER_CANARY
+#          predicates:
+#            - Path=/user-center/**
+#            - Weight=servicew1, 10
+        - id: user-front
+          uri: lb://USER-FRONT
+          order: 0
+          predicates:
+            - Path=/user-front/**
+          filters:
+            - StripPrefix=0

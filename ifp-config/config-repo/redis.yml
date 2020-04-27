@@ -1,6 +1,6 @@
 spring:
   redis:
-    host: ifp3-dev1
+    host: reids
     password:
-    port: 6377
+    port: 6379
     database: 0

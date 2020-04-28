@@ -123,9 +123,9 @@ services:
   # This data is served by http://192.168.99.100:8080/dependency
   #
   # For more details, see https://github.com/openzipkin/docker-zipkin-dependencies
-  dependencies:
+  zipkin-dependencies:
     image: openzipkin/zipkin-dependencies
-    container_name: dependencies
+    container_name: zipkin-dependencies
     entrypoint: crond -f
     environment:
       - STORAGE_TYPE=elasticsearch

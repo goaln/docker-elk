@@ -1,6 +1,6 @@
 FROM openjdk:8-jdk-alpine
 
-ARG JAR_FILE=./ifp-hystrix-dashboard.jar
+ARG JAR_FILE=./ifp-turbine.jar
 
 COPY ${JAR_FILE} app.jar
 

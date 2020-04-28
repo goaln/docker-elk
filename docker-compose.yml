@@ -214,6 +214,7 @@ services:
       - ifp-registry-2
       - ifp-registry-3
       - ifp-config
+      - redis
 
 networks:
   elk:

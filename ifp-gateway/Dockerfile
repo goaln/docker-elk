@@ -6,4 +6,6 @@ COPY ${JAR_FILE} app.jar
 
 EXPOSE 8080/tcp
 
-ENTRYPOINT ["java","-jar","/app.jar"]
+COPY ./wait-and-start.sh /wait-and-start.sh
+
+ENTRYPOINT ["/bin/sh","/wait-and-start.sh","ifp-config","7070"]

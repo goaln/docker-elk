@@ -1,6 +1,6 @@
 spring:
   redis:
-    host: reids
+    host: redis
     password:
     port: 6379
     database: 0

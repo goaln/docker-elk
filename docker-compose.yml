@@ -124,7 +124,10 @@ services:
   #
   # For more details, see https://github.com/openzipkin/docker-zipkin-dependencies
   zipkin-dependencies:
-    image: openzipkin/zipkin-dependencies
+    #image: openzipkin/zipkin-dependencies
+    build:
+      context: zipkin-dependencies/
+    image: zipkin-dependencies
     container_name: zipkin-dependencies
     entrypoint: crond -f
     environment:

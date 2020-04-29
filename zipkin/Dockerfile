@@ -21,6 +21,7 @@ ENV ZIPKIN_VERSION 2.21.1
 COPY zipkin/ /zipkin/
 WORKDIR /zipkin
 
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 RUN apk add unzip curl --no-cache && \
     curl -SL $ZIPKIN_REPO/io/zipkin/zipkin-server/$ZIPKIN_VERSION/zipkin-server-$ZIPKIN_VERSION-exec.jar > zipkin-server.jar && \
     # don't break when unzip finds an extra header https://github.com/openzipkin/zipkin/issues/1932

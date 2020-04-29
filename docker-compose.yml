@@ -140,6 +140,8 @@ services:
       # - ZIPKIN_LOG_LEVEL=DEBUG
       # Uncomment to adjust memory used by the dependencies job
       # - JAVA_OPTS=-verbose:gc -Xms1G -Xmx1G
+    networks:
+      - ifp3
     depends_on:
       - elasticsearch
 

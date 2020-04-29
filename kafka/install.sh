@@ -2,6 +2,7 @@
 set -eux
 
 echo "*** Installing Kafka and dependencies"
+sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 apk add --update --no-cache jq curl
 
 #APACHE_MIRROR=$(curl --stderr /dev/null https://www.apache.org/dyn/closer.cgi\?as_json\=1 | jq -r '.preferred')

@@ -29,6 +29,7 @@ WORKDIR /zipkin-dependencies
 COPY periodic/ /etc/periodic/
 
 # Adds coreutils to allow date formatting of 'yesterday'
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 RUN apk add --no-cache coreutils && \
     curl -sSL $ZIPKIN_REPO/io/zipkin/dependencies/zipkin-dependencies/$DEPENDENCIES_VERSION/zipkin-dependencies-$DEPENDENCIES_VERSION.jar > zipkin-dependencies.jar
 

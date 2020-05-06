@@ -1,0 +1,59 @@
+spring:
+  application:
+    name: config-server
+  zipkin:
+    # base-url: http://192.168.203.147:9411
+    sender:
+      type: kafka
+  kafka:
+    bootstrap-servers: ${KAFKA_URL:localhost:9092}
+  profiles:
+    active: native
+  cloud:
+    config:
+      server:
+        native:
+          searchLocations: /config-repo
+        #git:
+        #  uri: http://git.ynet.io/ifp3/ifp-config-repo.git
+        #  username: ******
+        #  password: ******
+    bus:
+      #enabled: true
+      trace:
+        enabled: true
+    stream:
+      kafka:
+        binder:
+          zkNodes: ${KAFKA_ZK:localhost:2181}
+          brokers: ${KAFKA_URL:localhost:9092}
+server:
+  port: 7070
+
+management:
+  security:
+    enabled: false
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: ALWAYS
+
+eureka:
+  instance:
+    leaseRenewalIntervalInSeconds: 10
+    lease-expiration-duration-in-seconds: 20
+    health-check-url-path: /actuator/health
+    prefer-ip-address: true
+  client:
+    registryFetchIntervalSeconds: 5
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: ${EUREKA_SERVICE_URL:http://localhost:8761/eureka/}
+
+logging:
+  level:
+    org.springframework.cloud.bus: DEBUG

@@ -161,47 +161,66 @@ services:
     networks:
       - ifp3
 
-  ifp-registry-1:
-    build:
-      context: ifp-registry/
-    image: ifp-registry
-    container_name: ifp-registry-1
+  consul-1:
+    image: consul:1.8.0
+    container_name: consul-1
+    volumes:
+      - type: bind
+        source: ./consul/config.json
+        target: /consul/config/config.json
+        read_only: true
     environment:
-      #- ZIPKIN_URL=
-      - HOST_NAME=ifp-registry-1
-      - EUREKA_REGISTER=true
-      - EUREKA_FETCH=true
-      - EUREKA_SERVICE_URL=http://ifp-registry-2:8761/eureka/,http://ifp-registry-3:8761/eureka/
+      - CONSUL_BIND_INTERFACE=consul-1
+      - CONSUL_CLIENT_INTERFACE=consul-1
+    command: consul agent -node=consul-server-1
     ports:
-      - 8761:8761
+      - 8500:8500
+      - 8600:8600
+      - 8300:8300
+      - 8301:8301
+      - 8302:8302
     networks:
       - ifp3
 
-  ifp-registry-2:
-    image: ifp-registry
-    container_name: ifp-registry-2
+  consul-2:
+    image: consul:1.8.0
+    container_name: consul-2
+    volumes:
+      - type: bind
+        source: ./consul/config.json
+        target: /consul/config/config.json
+        read_only: true
     environment:
-      #- ZIPKIN_URL=
-      - HOST_NAME=ifp-registry-2
-      - EUREKA_REGISTER=true
-      - EUREKA_FETCH=true
-      - EUREKA_SERVICE_URL=http://ifp-registry-1:8761/eureka/,http://ifp-registry-3:8761/eureka/
+      - CONSUL_BIND_INTERFACE=consul-2
+      - CONSUL_CLIENT_INTERFACE=consul-2
+    command: consul agent -node=consul-server-2 -retry-join=consul-1
     ports:
-      - 8762:8761
+      - 8510:8500
+      - 8610:8600
+      - 8310:8300
+      - 8311:8301
+      - 8312:8302
     networks:
       - ifp3
 
-  ifp-registry-3:
-    image: ifp-registry
-    container_name: ifp-registry-3
+  consul-3:
+    image: consul:1.8.0
+    container_name: consul-3
+    volumes:
+      - type: bind
+        source: ./consul/config.json
+        target: /consul/config/config.json
+        read_only: true
     environment:
-      #- ZIPKIN_URL=
-      - HOST_NAME=ifp-registry-3
-      - EUREKA_REGISTER=true
-      - EUREKA_FETCH=true
-      - EUREKA_SERVICE_URL=http://ifp-registry-1:8761/eureka/,http://ifp-registry-2:8761/eureka/
+      - CONSUL_BIND_INTERFACE=consul-3
+      - CONSUL_CLIENT_INTERFACE=consul-3
+    command: consul agent -node=consul-server-3 -retry-join=consul-1
     ports:
-      - 8763:8761
+      - 8520:8500
+      - 8620:8600
+      - 8320:8300
+      - 8321:8301
+      - 8322:8302
     networks:
       - ifp3
 

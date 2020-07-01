@@ -169,10 +169,12 @@ services:
         source: ./consul/config.json
         target: /consul/config/config.json
         read_only: true
+      - type: volume
+        source: consul_data_1
+        target: /consul/data
     environment:
-      - CONSUL_BIND_INTERFACE=consul-1
-      - CONSUL_CLIENT_INTERFACE=consul-1
-    command: consul agent -node=consul-server-1
+      - CONSUL_BIND_INTERFACE=eth0
+    command: consul agent -node=consul-server-1 -config-dir=/consul/config
     ports:
       - 8500:8500
       - 8600:8600
@@ -180,7 +182,9 @@ services:
       - 8301:8301
       - 8302:8302
     networks:
-      - ifp3
+      ifp3: 
+        aliases:
+          - consul.network
 
   consul-2:
     image: consul:1.8.0
@@ -190,10 +194,12 @@ services:
         source: ./consul/config.json
         target: /consul/config/config.json
         read_only: true
+      - type: volume
+        source: consul_data_2
+        target: /consul/data
     environment:
-      - CONSUL_BIND_INTERFACE=consul-2
-      - CONSUL_CLIENT_INTERFACE=consul-2
-    command: consul agent -node=consul-server-2 -retry-join=consul-1
+      - CONSUL_BIND_INTERFACE=eth0
+    command: consul agent -node=consul-server-2 -config-dir=/consul/config -retry-join=consul.network
     ports:
       - 8510:8500
       - 8610:8600
@@ -211,10 +217,14 @@ services:
         source: ./consul/config.json
         target: /consul/config/config.json
         read_only: true
+      - type: volume
+        source: consul_data_3
+        target: /consul/data
     environment:
-      - CONSUL_BIND_INTERFACE=consul-3
-      - CONSUL_CLIENT_INTERFACE=consul-3
-    command: consul agent -node=consul-server-3 -retry-join=consul-1
+      - CONSUL_BIND_INTERFACE=eth0
+    command: consul agent -node=consul-server-3 -config-dir=/consul/config -retry-join=consul.network
+    ports:
+      - 8510:8500
     ports:
       - 8520:8500
       - 8620:8600
@@ -294,3 +304,6 @@ networks:
 
 volumes:
   elasticsearch:
+  consul_data_1:
+  consul_data_2:
+  consul_data_3:

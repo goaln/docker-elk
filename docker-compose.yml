@@ -244,9 +244,9 @@ services:
       - ifp3
     depends_on:
       - kafka-zookeeper
-      - ifp-registry-1
-      - ifp-registry-2
-      - ifp-registry-3
+      - consul-1
+      - consul-2
+      - consul-3
 
   ifp-gateway:
     build:
@@ -263,9 +263,9 @@ services:
       - ifp3
     depends_on:
       - kafka-zookeeper
-      - ifp-registry-1
-      - ifp-registry-2
-      - ifp-registry-3
+      - consul-1
+      - consul-2
+      - consul-3
       - ifp-config
       - redis
 
@@ -284,9 +284,9 @@ services:
       - ifp3
     depends_on:
       - kafka-zookeeper
-      - ifp-registry-1
-      - ifp-registry-2
-      - ifp-registry-3
+      - consul-1
+      - consul-2
+      - consul-3
 
 networks:
   ifp3:

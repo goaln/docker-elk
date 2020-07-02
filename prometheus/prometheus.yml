@@ -30,8 +30,8 @@ scrape_configs:
     scheme: http
     metrics_path: '/actuator/prometheus'
     consul_sd_configs:
-      - server: 'consul.network:8500'
-        tags: prometheus
+      - server: 'consul-1:8500'
+        tags: ['prometheus']
     relabel_configs:
       - source_labels: [_meta_consul_metadata_metrics_path]
         action: replace

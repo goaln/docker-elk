@@ -251,7 +251,8 @@ services:
     ports:
       - 9090:9090
     networks:
-      - ifp3    
+      - ifp3
+    restart: always    
 
   grafana:
     image: grafana/grafana:7.0.5

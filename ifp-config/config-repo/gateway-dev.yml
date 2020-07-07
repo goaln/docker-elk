@@ -10,9 +10,9 @@ spring:
           uri: lb://user-front
           order: 0
           predicates:
-            - Path=/user-front/**
+            - Path=/user-front-1/**
           filters:
-            - StripPrefix=0
+            - RewritePath=/user-front-1/(?<remaining>.*), /$\{remaining}
             #熔断
             - name: CircuitBreaker
               args:

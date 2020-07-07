@@ -318,6 +318,7 @@ services:
       - consul-3
       - ifp-config
       - redis
+    restart: always
 
 networks:
   ifp3:

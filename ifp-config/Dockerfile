@@ -9,4 +9,4 @@ EXPOSE 7070/tcp
 
 COPY ./wait-and-start.sh /wait-and-start.sh
 
-ENTRYPOINT ["/bin/sh","wait-and-start.sh","ifp-registry-1","8761"]
+ENTRYPOINT ["/bin/sh","wait-and-start.sh","consul-1","8500"]

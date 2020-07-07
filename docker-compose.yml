@@ -287,7 +287,7 @@ services:
     environment:
       - KAFKA_ZK=kafka-zookeeper:2181
       - KAFKA_URL=kafka-zookeeper:9092
-      - EUREKA_SERVICE_URL=http://ifp-registry-1:8761/eureka/,http://ifp-registry-2:8761/eureka/,http://ifp-registry-3:8761/eureka/
+      - CONSUL_URL=consul-1
     ports:
       - 7070:7070
     networks:
@@ -306,7 +306,7 @@ services:
     environment:
       - KAFKA_ZK=kafka-zookeeper:2181
       - KAFKA_URL=kafka-zookeeper:9092
-      - EUREKA_SERVICE_URL=http://ifp-registry-1:8761/eureka/,http://ifp-registry-2:8761/eureka/,http://ifp-registry-3:8761/eureka/
+      - CONSUL_URL=consul-1
     ports:
       - 8080:8080
     networks:

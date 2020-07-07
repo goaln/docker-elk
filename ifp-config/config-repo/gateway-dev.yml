@@ -6,17 +6,17 @@ spring:
         locator:
           enabled: true
       routes:
-        - id: user-center
-          uri: lb://USER-CENTER
+        - id: user-front
+          uri: lb://user-front
           order: 0
           predicates:
-            - Path=/user-center/**
+            - Path=/user-front/**
           filters:
             - StripPrefix=0
             #熔断
-            - name: Hystrix
+            - name: CircuitBreaker
               args:
-                name: fallbackcmd
+                name: gateway-circuitbreak
                 fallbackUri: forward:/fallback
             #限流
             - name: RequestRateLimiter

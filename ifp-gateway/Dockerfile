@@ -3,6 +3,7 @@ FROM openjdk:8-jdk-alpine
 ARG JAR_FILE=./ifp-gateway.jar
 
 COPY ${JAR_FILE} app.jar
+COPY ./bootstrap.yml bootstrap.yml
 
 EXPOSE 8080/tcp
 

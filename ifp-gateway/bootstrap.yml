@@ -56,3 +56,51 @@ management:
       enabled: true
     health:
       show-details: ALWAYS
+
+management.metrics.tags.application: ${spring.application.name}
+management.metrics.distribution.percentiles-histogram.http.server.requests: true
+management.metrics.distribution.percentiles-histogram.resilience4j.circuitbreaker.calls: true
+
+resilience4j.circuitbreaker:
+  configs:
+    default:
+      registerHealthIndicator: true
+      slidingWindowSize: 10
+      minimumNumberOfCalls: 5
+      slidingWindowType: TIME_BASED
+      permittedNumberOfCallsInHalfOpenState: 3
+      automaticTransitionFromOpenToHalfOpenEnabled: true
+      waitDurationInOpenState: 2s
+      failureRateThreshold: 60
+      eventConsumerBufferSize: 10
+#      recordExceptions:
+#        - org.springframework.web.client.HttpServerErrorException
+#        - java.io.IOException
+
+resilience4j.retry:
+  configs:
+    default:
+      maxRetryAttempts: 2
+      waitDuration: 100
+      retryExceptions:
+        - org.springframework.web.client.HttpServerErrorException
+        - java.io.IOException
+
+resilience4j.bulkhead:
+  configs:
+    default:
+      maxConcurrentCalls: 100
+
+resilience4j.thread-pool-bulkhead:
+  configs:
+    default:
+      maxThreadPoolSize: 4
+      coreThreadPoolSize: 2
+      queueCapacity: 2
+
+resilience4j.ratelimiter:
+  configs:
+    default:
+      timeoutDuration: 5s
+      limitForPeriod: 10
+      limitRefreshPeriod: 1s

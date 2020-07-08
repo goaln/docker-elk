@@ -1,0 +1,50 @@
+management.metrics.tags.application: ${spring.application.name}
+management.metrics.distribution.percentiles-histogram.http.server.requests: true
+management.metrics.distribution.percentiles-histogram.resilience4j.circuitbreaker.calls: true
+
+resilience4j.circuitbreaker:
+  configs:
+    default:
+      registerHealthIndicator: true
+      slidingWindowSize: 10
+      minimumNumberOfCalls: 5         #可以开始计算失败率的最少调用次数
+      slidingWindowType: TIME_BASED   #时间窗口类型 COUNT_BASED 还是 TIME_BASED
+      permittedNumberOfCallsInHalfOpenState: 3
+      automaticTransitionFromOpenToHalfOpenEnabled: true
+      waitDurationInOpenState: 2s     #OPEN 状态下熔断器等待时间
+      failureRateThreshold: 60        #失败率阈值
+      slowCallRateThreshold: 80       #慢调用率阈值    
+      slowCallDurationThreshold: 10s  #慢调用时间阈值  
+      eventConsumerBufferSize: 10
+#      recordExceptions:              #标记为失败的异常列表
+#        - org.springframework.web.client.HttpServerErrorException
+#        - java.io.IOException
+
+resilience4j.retry:
+  configs:
+    default:
+      maxRetryAttempts: 2 #最大重试次数
+      waitDuration: 100   #尝试重试之间的等待时间
+      retryExceptions:    #需要重试的异常列表
+        - org.springframework.web.client.HttpServerErrorException
+        - java.io.IOException
+
+resilience4j.bulkhead:
+  configs:
+    default:
+      maxConcurrentCalls: 100 #bulkhead允许并行执行的最大数量  
+
+resilience4j.thread-pool-bulkhead:
+  configs:
+    default:
+      maxThreadPoolSize: 4  #线程池的最大数量
+      coreThreadPoolSize: 2 #线程池的 core 数量
+      queueCapacity: 2      #队列的大小
+
+resilience4j.ratelimiter:
+  configs:
+    default:
+      timeoutDuration: 5s     #线程等待允许的超时时间
+      limitForPeriod: 10      #一个周期内允许的数量
+      limitRefreshPeriod: 1s  #限制刷新的周期
+     

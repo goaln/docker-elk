@@ -12,11 +12,11 @@ spring:
           predicates:
             - Path=/user-front-1/**
           filters:
-            - RewritePath=/user-front-1/(?<remaining>.*), /$\{remaining}
+            - RewritePath=/user-front-1/(?<segment>.*), /$\{segment}
             #熔断
             - name: CircuitBreaker
               args:
-                name: gateway-circuitbreak
+                name: gateway-circuit-breaker
                 fallbackUri: forward:/fallback
             #限流
             - name: RequestRateLimiter

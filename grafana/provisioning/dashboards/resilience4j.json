@@ -1198,10 +1198,7 @@
     "list": [
       {
         "allValue": null,
-        "current": {
-          "text": "resilience4j-demo",
-          "value": "resilience4j-demo"
-        },
+        "current": {},
         "datasource": "Prometheus",
         "definition": "label_values(application)",
         "hide": 0,
@@ -1223,12 +1220,7 @@
       },
       {
         "allValue": null,
-        "current": {
-          "text": "localhost:9080",
-          "value": [
-            "localhost:9080"
-          ]
-        },
+        "current": {},
         "datasource": "Prometheus",
         "definition": "label_values(resilience4j_circuitbreaker_state, instance)",
         "hide": 0,
@@ -1236,18 +1228,7 @@
         "label": "Instance",
         "multi": true,
         "name": "instance",
-        "options": [
-          {
-            "selected": false,
-            "text": "All",
-            "value": "$__all"
-          },
-          {
-            "selected": true,
-            "text": "localhost:9080",
-            "value": "localhost:9080"
-          }
-        ],
+        "options": [],
         "query": "label_values(resilience4j_circuitbreaker_state, instance)",
         "refresh": 0,
         "regex": "",
@@ -1261,10 +1242,7 @@
       },
       {
         "allValue": null,
-        "current": {
-          "text": "backendA",
-          "value": "backendA"
-        },
+        "current": {},
         "datasource": "Prometheus",
         "definition": "label_values(resilience4j_circuitbreaker_state, name)",
         "hide": 0,
@@ -1286,13 +1264,7 @@
       },
       {
         "allValue": null,
-        "current": {
-          "tags": [],
-          "text": "backendA",
-          "value": [
-            "backendA"
-          ]
-        },
+        "current": {},
         "datasource": "Prometheus",
         "definition": "label_values(resilience4j_retry_calls, name)",
         "hide": 0,
@@ -1314,10 +1286,7 @@
       },
       {
         "allValue": null,
-        "current": {
-          "text": "backendA",
-          "value": "backendA"
-        },
+        "current": {},
         "datasource": "Prometheus",
         "definition": "label_values(resilience4j_bulkhead_available_concurrent_calls, name)",
         "hide": 0,

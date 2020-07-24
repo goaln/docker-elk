@@ -237,8 +237,8 @@ services:
     container_name: prometheus
     volumes:
       - type: bind
-        source: ./prometheus/prometheus.yml
-        target: /etc/prometheus/prometheus.yml
+        source: ./prometheus/
+        target: /etc/prometheus/
         read_only: true
       - type: volume
         source: prometheus_data
@@ -258,6 +258,7 @@ services:
 
   alertmanager:
     image: prom/alertmanager:v0.21.0
+    container_name: alertmanager
     volumes:
       - ./alertmanager/:/etc/alertmanager/
     command:

@@ -1,5 +1,11 @@
 global:
   resolve_timeout: 5m #处理超时时间，默认为5min
+  # 配置邮件发送信息
+  smtp_smarthost: 'smtp.belink.com:25'
+  smtp_from: 'gaolin@belink.com'
+  smtp_auth_username: 'gaolin@belink.com'
+  smtp_auth_password: 'email_passwd'
+  smtp_require_tls: false
 
 # route:
 #   receiver: webhook
@@ -32,9 +38,5 @@ receivers:
   - name: 'email'
     email_configs:
       - to: gaolin@belink.com
-        from: gaolin@belink.com
-        smarthost: smtp.belink.com:25
-        auth_username: gaolin@belink.com
-        auth_identity: gaolin@belink.com
-        auth_password: ******
+        text: 'summary: {{ .CommonAnnotations.summary }}\ndescription: {{ .CommonAnnotations.description }}'
         send_resolved: true

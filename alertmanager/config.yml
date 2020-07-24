@@ -36,5 +36,5 @@ receivers:
         smarthost: smtp.belink.com:25
         auth_username: gaolin@belink.com
         auth_identity: gaolin@belink.com
-        auth_password: gl831114
+        auth_password: ******
         send_resolved: true

@@ -1,0 +1,84 @@
+version: '3.2'
+
+services:
+
+  consul-1:
+    image: consul:1.8.0
+    container_name: consul-1
+    volumes:
+      - type: bind
+        source: ./consul/config.json
+        target: /consul/config/config.json
+        read_only: true
+      - type: volume
+        source: consul_data_1
+        target: /consul/data
+    environment:
+      - CONSUL_BIND_INTERFACE=eth0
+    command: consul agent -node=consul-server-1 -config-dir=/consul/config
+    ports:
+      - 8500:8500
+      - 8600:8600
+      - 8300:8300
+      - 8301:8301
+      - 8302:8302
+    networks:
+      ifp3: 
+        aliases:
+          - consul.network
+
+  consul-2:
+    image: consul:1.8.0
+    container_name: consul-2
+    volumes:
+      - type: bind
+        source: ./consul/config.json
+        target: /consul/config/config.json
+        read_only: true
+      - type: volume
+        source: consul_data_2
+        target: /consul/data
+    environment:
+      - CONSUL_BIND_INTERFACE=eth0
+    command: consul agent -node=consul-server-2 -config-dir=/consul/config -retry-join=consul.network
+    ports:
+      - 8510:8500
+      - 8610:8600
+      - 8310:8300
+      - 8311:8301
+      - 8312:8302
+    networks:
+      - ifp3
+
+  consul-3:
+    image: consul:1.8.0
+    container_name: consul-3
+    volumes:
+      - type: bind
+        source: ./consul/config.json
+        target: /consul/config/config.json
+        read_only: true
+      - type: volume
+        source: consul_data_3
+        target: /consul/data
+    environment:
+      - CONSUL_BIND_INTERFACE=eth0
+    command: consul agent -node=consul-server-3 -config-dir=/consul/config -retry-join=consul.network
+    ports:
+      - 8520:8500
+      - 8620:8600
+      - 8320:8300
+      - 8321:8301
+      - 8322:8302
+    networks:
+      - ifp3
+
+networks:
+  ifp3:
+    driver: bridge
+    external: true
+
+volumes:
+  consul_data_1:
+  consul_data_2:
+  consul_data_3:

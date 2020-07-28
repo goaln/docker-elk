@@ -22,6 +22,9 @@ services:
       - 9090:9090
     networks:
       - ifp3
+    extra_hosts:
+      - "ifp3-dev1:172.17.198.212"
+      - "ifp3-dev2:172.17.198.214"
     depends_on:
       - alertmanager
     restart: always
@@ -38,6 +41,9 @@ services:
       - 9093:9093
     networks:
       - ifp3
+    extra_hosts:
+      - "ifp3-dev1:172.17.198.212"
+      - "ifp3-dev2:172.17.198.214"
 
   grafana:
     image: grafana/grafana:7.0.5
@@ -61,8 +67,9 @@ services:
 
 networks:
   ifp3:
-    driver: bridge
-    external: true
+    #driver: bridge
+    external: 
+      name: ifp3-docker_ifp3
 
 volumes:
   prometheus_data:

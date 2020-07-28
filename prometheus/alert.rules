@@ -12,11 +12,29 @@ groups:
       summary: "Instance {{ $labels.instance }} down"
       description: "{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 2 minutes."
 
-  - alert: high_load
-    expr: node_load1 > 0.5
+  - alert: circuit_break
+    expr: resilience4j_circuitbreaker_state{state="open"} > 0
+    for: 10s
+    labels:
+      severity: critical
+    annotations:
+      summary: "Instance {{ $labels.instance }} circuit break"
+      description: "{{ $labels.instance }} of job {{ $labels.job }} has circuit break."
+
+  - alert: cpu_usage
+    expr: process_cpu_usage > 0.5
     for: 2m
     labels:
-      severity: page
+      severity: critical
     annotations:
-      summary: "Instance {{ $labels.instance }} under high load"
-      description: "{{ $labels.instance }} of job {{ $labels.job }} is under high load."
+      summary: "Instance {{ $labels.instance }} high cpu usage"
+      description: "{{ $labels.instance }} of job {{ $labels.job }} high cpu usage detect."
+
+  - alert: request_failure
+    expr: resilience4j_circuitbreaker_failure_rate > 0.5
+    for: 10s
+    labels:
+      severity: critical
+    annotations:
+      summary: "Instance {{ $labels.instance }} high request failure rate"
+      description: "{{ $labels.instance }} of job {{ $labels.job }} high request failure rate detect."

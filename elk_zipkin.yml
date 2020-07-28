@@ -13,18 +13,20 @@ services:
         source: ./elasticsearch/config/elasticsearch.yml
         target: /usr/share/elasticsearch/config/elasticsearch.yml
         read_only: true
-      - type: volume
-        source: elasticsearch
+      - type: bind
+        source: /data1/software/elk/elasticsearch-7.6.0/data
         target: /usr/share/elasticsearch/data
     ports:
       - "9200:9200"
       - "9300:9300"
+#    command: su - elasticsearch  -c "chown -R elasticsearch:root /usr/share/elasticsearch/data && /usr/local/bin/docker-entrypoint.sh"
     environment:
       ES_JAVA_OPTS: "-Xmx256m -Xms256m"
-      ELASTIC_PASSWORD: changeme
+      #ELASTIC_PASSWORD: changeme
       # Use single node discovery in order to disable production mode and avoid bootstrap checks
       # see https://www.elastic.co/guide/en/elasticsearch/reference/current/bootstrap-checks.html
       discovery.type: single-node
+      TAKE_FILE_OWNERSHIP: "true"
     networks:
       - ifp3
 
@@ -92,11 +94,11 @@ services:
       - STORAGE_TYPE=elasticsearch
       # Point the zipkin at the storage backend
       - ES_HOSTS=elasticsearch:9200
-      - ES_USERNAME=elastic
-      - ES_PASSWORD=changeme
+      #- ES_USERNAME=elastic
+      #- ES_PASSWORD=changeme
       # Uncomment to see requests to and from elasticsearch
       # - ES_HTTP_LOGGING=BODY
-      - KAFKA_BOOTSTRAP_SERVERS=kafka-zookeeper:9092
+      - KAFKA_BOOTSTRAP_SERVERS=172.17.198.212:9092
     ports:
       # Port used for the Zipkin UI and HTTP Api
       - 9411:9411
@@ -122,8 +124,8 @@ services:
       - STORAGE_TYPE=elasticsearch
       # Point the zipkin at the storage backend
       - ES_HOSTS=elasticsearch:9200
-      - ES_USERNAME=elastic
-      - ES_PASSWORD=changeme
+      #- ES_USERNAME=elastic
+      #- ES_PASSWORD=changeme
       # Uncomment to see dependency processing logs
       # - ZIPKIN_LOG_LEVEL=DEBUG
       # Uncomment to adjust memory used by the dependencies job
@@ -135,8 +137,9 @@ services:
 
 networks:
   ifp3:
-    driver: bridge
-    external: true
+    #driver: bridge
+    external:
+      name: ifp3-docker_ifp3
 
-volumes:
-  elasticsearch:
+#volumes:
+#  elasticsearch:

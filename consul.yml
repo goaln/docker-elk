@@ -1,4 +1,4 @@
-version: '3.2'
+version: '3.8'
 
 services:
 
@@ -22,10 +22,14 @@ services:
       - 8300:8300
       - 8301:8301
       - 8302:8302
+    extra_hosts:
+      - "ifp3-dev1:172.17.198.212"
+      - "ifp3-dev2:172.17.198.214"
     networks:
-      ifp3: 
-        aliases:
-          - consul.network
+      ifp3:
+        #aliases:
+        #  - consul.network
+    #network_mode: bridge
 
   consul-2:
     image: consul:1.8.0
@@ -40,15 +44,21 @@ services:
         target: /consul/data
     environment:
       - CONSUL_BIND_INTERFACE=eth0
-    command: consul agent -node=consul-server-2 -config-dir=/consul/config -retry-join=consul.network
+    command: consul agent -node=consul-server-2 -config-dir=/consul/config -retry-join=consul-1
     ports:
       - 8510:8500
       - 8610:8600
       - 8310:8300
       - 8311:8301
       - 8312:8302
+    extra_hosts:
+      - "ifp3-dev1:172.17.198.212"
+      - "ifp3-dev2:172.17.198.214"
+    depends_on:
+      - consul-1
     networks:
       - ifp3
+    #network_mode: bridge
 
   consul-3:
     image: consul:1.8.0
@@ -63,20 +73,25 @@ services:
         target: /consul/data
     environment:
       - CONSUL_BIND_INTERFACE=eth0
-    command: consul agent -node=consul-server-3 -config-dir=/consul/config -retry-join=consul.network
+    command: consul agent -node=consul-server-3 -config-dir=/consul/config -retry-join=consul-1
     ports:
       - 8520:8500
       - 8620:8600
       - 8320:8300
       - 8321:8301
       - 8322:8302
+    extra_hosts:
+      - "ifp3-dev1:172.17.198.212"
+      - "ifp3-dev2:172.17.198.214"
+    depends_on:
+      - consul-1
     networks:
       - ifp3
+    #network_mode: bridge
 
 networks:
   ifp3:
     driver: bridge
-    external: true
 
 volumes:
   consul_data_1:

@@ -1,0 +1,31 @@
+version: '3.2'
+
+services:
+  grafana:
+    image: grafana/grafana:7.0.5
+    container_name: grafana
+    env_file:
+      - ./grafana/config.monitoring
+    volumes:
+      - type: bind
+        source: ./grafana/config/defaults.ini
+        target: /usr/share/grafana/conf/defaults.ini
+        read_only: true
+      - type: bind
+        source: ./grafana/provisioning/
+        target: /etc/grafana/provisioning/
+        read_only: true
+      - type: volume
+        source: grafana_data
+        target: /var/lib/grafana
+    ports:
+      - 3000:3000
+    networks:
+      - ifp3 
+
+networks:
+  ifp3:
+    driver: bridge
+
+volumes:
+  grafana_data:

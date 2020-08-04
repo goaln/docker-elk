@@ -10,7 +10,7 @@ groups:
       severity: critical
     annotations:
       summary: "Instance {{ $labels.instance }} down"
-      description: "{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 2 minutes."
+      description: "{{ $labels.instance }} of {{ $labels.application }} has been down for more than 2 minutes."
 
   - alert: circuit_break
     expr: resilience4j_circuitbreaker_state{state="open"} > 0
@@ -19,7 +19,7 @@ groups:
       severity: critical
     annotations:
       summary: "Instance {{ $labels.instance }} circuit break"
-      description: "{{ $labels.instance }} of job {{ $labels.job }} has circuit break."
+      description: "{{ $labels.instance }} of {{ $labels.application }} has circuit break."
 
   - alert: cpu_usage
     expr: process_cpu_usage > 0.5
@@ -28,7 +28,7 @@ groups:
       severity: critical
     annotations:
       summary: "Instance {{ $labels.instance }} high cpu usage"
-      description: "{{ $labels.instance }} of job {{ $labels.job }} high cpu usage detect."
+      description: "{{ $labels.instance }} of {{ $labels.application }} high cpu usage detect."
 
   - alert: request_failure
     expr: resilience4j_circuitbreaker_failure_rate > 0.5
@@ -37,4 +37,4 @@ groups:
       severity: critical
     annotations:
       summary: "Instance {{ $labels.instance }} high request failure rate"
-      description: "{{ $labels.instance }} of job {{ $labels.job }} high request failure rate detect."
+      description: "{{ $labels.instance }} of {{ $labels.application }} high request failure rate detect."

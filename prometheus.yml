@@ -52,6 +52,10 @@ services:
       - ./grafana/config.monitoring
     volumes:
       - type: bind
+        source: ./grafana/config/defaults.ini
+        target: /usr/share/grafana/conf/defaults.ini
+        read_only: true
+      - type: bind
         source: ./grafana/provisioning/
         target: /etc/grafana/provisioning/
         read_only: true
@@ -60,6 +64,8 @@ services:
         target: /var/lib/grafana
     ports:
       - 3000:3000
+    extra_hosts:
+      - "ifp3_dev.cloudbills.cn:39.106.80.206"
     networks:
       - ifp3 
     depends_on:
